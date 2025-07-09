@@ -12,7 +12,7 @@ classdef potential
         [V,F] = Vlinear(r1,r2,pm,varargin);
         [V] = Vspring(r1,r2,l0,k,varargin);
         [V] = Vising(spin1,spin2,J,varargin);
-        [V] = VLennard(r1,r2,Epw,r0,varargin);
+        [V] = Vlj(r1,r2,Epw,r0,varargin);
     end
 end
 
