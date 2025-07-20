@@ -19,6 +19,7 @@ classdef potential
         [V,F] = Vfene(r1,r2,Vpm,varargin);
         [V,F] = Vworm(cosAng,Vpm,varargin);
         [V,F] = VwormDir(dir,Vpm,varargin);
+        [V] = VedgMembrane(r,Vedg);
     end
 end
 
