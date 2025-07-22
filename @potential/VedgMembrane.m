@@ -1,4 +1,4 @@
-function [V] = VedgMembrane(r,Vedg)
+function [V] = VedgMembrane(r1,r2,Vedg)
 %--------------------------------------------------------------------------
         % VinMembrane performs the computation of the internal 
         % potential of @ModMembrane
@@ -14,10 +14,12 @@ function [V] = VedgMembrane(r,Vedg)
 %--------------------------------------------------------------------------
 ip = inputParser;
 ip.CaseSensitive = false;
-ip.addRequired('r', @(x) isnumeric);
+ip.addRequired('r1', @(x) isnumeric);
+ip.addRequired('r2', @(x) isnumeric);
 ip.addRequired('Vedg', @(x) isstruct);
 %ip.parse(r,Vedg);
 %--------------------------------------------------------------------------------------------------------
+r=sqrt(sum((r2-r1).^2,2));
     V = Vedg.V_0*(1./tanh((r-Vedg.r_1)*Vedg.k_w)+1./tanh((Vedg.r_2-r)*Vedg.k_w)...
       - (Vedg.e_b/Vedg.e_w./(1+exp(-Vedg.k_b*(r-Vedg.rb_1)))+Vedg.e_b/Vedg.e_w./(1+exp(-Vedg.k_b*(Vedg.rb_2-r))))...
         );
