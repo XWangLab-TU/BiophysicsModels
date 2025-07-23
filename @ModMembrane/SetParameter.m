@@ -4,6 +4,7 @@ function [obj] = SetParameter(obj, varargin)
         % the units are in dimensionless defined by @ComUnit
         % input: 
         % obj - a @ModMembrane object
+        % when used separately, must include 'unit' even it is currently optional
         % optional:
         % see variable arguments
         %   See also SetVar
@@ -14,7 +15,7 @@ function [obj] = SetParameter(obj, varargin)
 ip = inputParser;
 ip.CaseSensitive = true;
 ip.addRequired('obj', @(x) isa(x,'ModMembrane'));
-ip.addParameter('unit', [], @isobject);
+ip.addParameter('unit', [], @isobject); 
 ip.addParameter('close_surf', true, @islogical);
 ip.addParameter('n_ico_sphere', 3, @isnumeric);
 ip.addParameter('max_rep_allow', 5, @isnumeric);
@@ -160,7 +161,6 @@ pm.mu=unit.unit_nat_any;
 if pm.nt_relax > pm.nt
     fprintf('wrong: relax time longer than total time\n')
 end
-
 pm.Vdh = struct('r_1', 0.0*pm.l0,... %-0.05*pm.l0
                 'r_2', 2.2*pm.l0,...
                 'r_best_min', 0.8*pm.l0,...
