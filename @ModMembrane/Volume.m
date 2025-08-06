@@ -44,11 +44,11 @@ dirV(~idtem)=1;
 Vver=zeros(nTriAll,1);
 for iTri=1:nTri
     iTem=idFace(iTri);
-    XYZ=m.var.coord(iVer(iTem,:),:)-O;
+    XYZ=m.var.coord(iVer(iTri,:),:)-O;
     Vver(iTem)=abs(-XYZ(3,1)*XYZ(2,2)*XYZ(1,3)+XYZ(2,1)*XYZ(3,2)*XYZ(1,3)+XYZ(3,1)*XYZ(1,2)*XYZ(2,3)...
                    -XYZ(1,1)*XYZ(3,2)*XYZ(2,3)-XYZ(2,1)*XYZ(1,2)*XYZ(3,3)+XYZ(1,1)*XYZ(2,2)*XYZ(3,3))/6;    
 end
-Vver=Vver.*dirV;
+Vver(idFace,:)=Vver(idFace,:).*dirV;
 %----------------------------------------------------------------------------------------
 end
 
