@@ -21,6 +21,7 @@ classdef potential
         [V,F] = VwormDir(dir,Vpm,varargin);
         [V] = VedgMembrane(r1,r2,Vedg);
         [V] = Vlj(r1,r2,Epw,r0,varargin);
+        [P,m] = VvolMembrane(m,Vvol,varargin);
     end
 end
 
