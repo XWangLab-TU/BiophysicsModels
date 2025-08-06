@@ -234,6 +234,7 @@ classdef ModMembrane
         [m,remeshed] = remeshFlipOpt(m,j,i_edg,varargin);
         [m,remeshed,edg_add] = remeshSplitOpt(m,j,k,id_ring_edg,edg_add_org,i_edg,rLim,varargin);
         [m,remeshed] = remeshMergeOpt(m,j,k,id_ring_edg,edg_add_org,i_edg,rLim,varargin);
+        [Vver] = Volume(m,varargin);
     end
 %==========================================================================
 %==========================================================================    
