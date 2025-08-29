@@ -21,11 +21,8 @@ nTry=0;
 changed=true;
 while (changed == true)
 %----------------------------------------------------------------------------------------
-        [idRemesh,SplitOrMerge]=getIDremesh(M,lc,i_mod);
+        [idRemesh,SplitOrMerge,split,merge]=getIDremesh(M,lc,i_mod);
         nRemesh = size(idRemesh,1);
-        if print_or_not==true
-            fprintf('abnormal edge: %d, long: %d, short: %d\n',nRemesh,numel(idTooLong),numel(idTooShort));
-        end
 %----------------------------------------------------------------------------------------        
         if nRemesh > 0
             iRemesh = randsample(nRemesh,1);
@@ -131,7 +128,7 @@ while (changed == true)
                     %----------------------------------------------------------
                     if successTem==true
                         [M.mod{i_mod}] = getUface(M.mod{i_mod});
-                        [M,~] = remeshLocRelax(m,M,edg_add,'local',1);
+                        [M,~] = remeshLocRelaxLattice(m,M,lc,edg_add,'local',1);
                     end
 %----------------------------------------------------------------------------------------                    
                     case 2 %merge
@@ -268,7 +265,7 @@ end
 %==========================================================================
 end
 %==========================================================================
-function [idRemesh,SplitOrMerge]=getIDremesh(M,lc,i_mod)
+function [idRemesh,SplitOrMerge,split,merge]=getIDremesh(M,lc,i_mod)
         meshIDedg=lc.component{i_mod}.meshID(M.mod{i_mod}.var.edge_all);
         coordTem1=meshToCoord(lc,meshIDedg(:,1));
         coordTem2=meshToCoord(lc,meshIDedg(:,2));
@@ -278,7 +275,7 @@ function [idRemesh,SplitOrMerge]=getIDremesh(M,lc,i_mod)
         idTooShort=id_all(idTooShort);
         idTooLong=dist>M.mod{i_mod}.pm.Vedg.rb_2;
         idTooLong=id_all(idTooLong);
-        [split,merge] = remeshSplitMerge(m,M,idTooLong,idTooShort);
+        [split,merge] = remeshSplitMerge(M.mod{i_mod},M,idTooLong,idTooShort);
         %M.mod{i_mod}.var.CanSplitMerge=[split.can,merge.can];
         idTooLong=idTooLong(split.can(idTooLong));
         idTooShort=idTooShort(merge.can(idTooShort));
@@ -294,7 +291,7 @@ function [i_edg]=getIDremeshPaired(M,lc,i_mod,minORmax)
         coordTem2=meshToCoord(lc,meshIDedg(:,2));
         dist=sqrt(sum((coordTem1-coordTem2).^2,2));
         id_all = (1:M.mod{i_mod}.var.n_edg)';
-        [split,merge] = remeshSplitMerge(m,M,id_all,id_all);
+        [split,merge] = remeshSplitMerge(M.mod{i_mod},M,id_all,id_all);
         if minORmax==1
             [~,idSrt]=sort(dist,'ascend');
             idSrt=idSrt(merge.can(idSrt));
