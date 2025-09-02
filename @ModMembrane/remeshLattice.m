@@ -128,6 +128,7 @@ while (changed == true)
                     %----------------------------------------------------------
                     if successTem==true
                         [M.mod{i_mod}] = getUface(M.mod{i_mod});
+                        lc = coordToMesh(lc,M);
                         [M,~] = remeshLocRelaxLattice(m,M,lc,edg_add,'local',1);
                     end
 %----------------------------------------------------------------------------------------                    

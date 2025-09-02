@@ -141,7 +141,7 @@ if ~isempty(id_int)
     M.mod{i_mod}.var.id_bound=[M.mod{i_mod}.var.id_bound;id_int];
 end
 %%
-[loc_relaxed,M.mod{i_mod}] = locDyn(M.mod{i_mod},M.TypForce,'edg_exo',edg_exo,'nt',ip.Results.n_step,'local',local,'D',M.mod{i_mod}.pm.DlocRelax);
+[lc,M.mod{i_mod}] = locDynLattice(m,lc,i_mod);
 
 M.mod{i_mod}.var.id_on_edg=id_on_edg_save;
 M.mod{i_mod}.var.n_on_edg=n_on_edg_save;
@@ -157,17 +157,16 @@ if (plot_or_not == true) %|| (relaxed == false)
 % m.var.id_on_edg=id_ring_edg;
 % m.var.id_on_coord=id_ring_in;
 % m.var.id_bound=id_ring_ver;
-
 plot(m,'FaceAlpha', 1, 'LineStyle','--'); xlabel('x');ylabel('y');zlabel('z');hold on;
-scatter3(m.var.coord(edg_add(:,1),1),m.var.coord(edg_add(:,1),2),m.var.coord(edg_add(:,1),3),40,'filled','MarkerFaceColor',[0 1 0]); hold on;
-scatter3(m.var.coord(edg_add(:,2),1),m.var.coord(edg_add(:,2),2),m.var.coord(edg_add(:,2),3),40,'filled','MarkerFaceColor',[0 1 0]); hold on;
+% scatter3(m.var.coord(edg_add(:,1),1),m.var.coord(edg_add(:,1),2),m.var.coord(edg_add(:,1),3),40,'filled','MarkerFaceColor',[0 1 0]); hold on;
+% scatter3(m.var.coord(edg_add(:,2),1),m.var.coord(edg_add(:,2),2),m.var.coord(edg_add(:,2),3),40,'filled','MarkerFaceColor',[0 1 0]); hold on;
 scatter3(m.var.coord(m.var.id_bound,1),m.var.coord(m.var.id_bound,2),m.var.coord(m.var.id_bound,3),40,'filled','MarkerFaceColor',[0 1 1]); hold on;
 scatter3(m.var.coord(m.var.id_on_coord,1),m.var.coord(m.var.id_on_coord,2),m.var.coord(m.var.id_on_coord,3),40,'filled','MarkerFaceColor',[0 0.2 1]); hold on;
-if local>1
-    plot3([m.var.coord(M.mod{i_mod}.var.edge_all(edg_exo,1),1),m.var.coord(M.mod{i_mod}.var.edge_all(edg_exo,2),1)],...
-      [m.var.coord(M.mod{i_mod}.var.edge_all(edg_exo,1),2),m.var.coord(M.mod{i_mod}.var.edge_all(edg_exo,2),2)],...
-      [m.var.coord(M.mod{i_mod}.var.edge_all(edg_exo,1),3),m.var.coord(M.mod{i_mod}.var.edge_all(edg_exo,2),3)],'linewidth',5,'color',[1 0 0]);hold on;
-end
+% if local>1
+%     plot3([m.var.coord(M.mod{i_mod}.var.edge_all(edg_exo,1),1),m.var.coord(M.mod{i_mod}.var.edge_all(edg_exo,2),1)],...
+%       [m.var.coord(M.mod{i_mod}.var.edge_all(edg_exo,1),2),m.var.coord(M.mod{i_mod}.var.edge_all(edg_exo,2),2)],...
+%       [m.var.coord(M.mod{i_mod}.var.edge_all(edg_exo,1),3),m.var.coord(M.mod{i_mod}.var.edge_all(edg_exo,2),3)],'linewidth',5,'color',[1 0 0]);hold on;
+% end
 for i = 1:n_ring_edg
     plot3([m.var.coord(m.var.edge_all(m.var.id_on_edg(i),1),1),m.var.coord(m.var.edge_all(m.var.id_on_edg(i),2),1)],...
       [m.var.coord(m.var.edge_all(m.var.id_on_edg(i),1),2),m.var.coord(m.var.edge_all(m.var.id_on_edg(i),2),2)],...
