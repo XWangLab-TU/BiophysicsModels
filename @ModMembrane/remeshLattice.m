@@ -34,6 +34,9 @@ while (changed == true)
                 SplitOrMergePair=[2 1];
             end
             for iSM=1:2
+                if iSM==2
+                    [i_edg,split,merge]=getIDremeshPaired(M,lc,i_mod,SplitOrMergePair(iSM));
+                end
                 switch SplitOrMergePair(iSM)
 %----------------------------------------------------------------------------------------                    
                     case 1 %split
@@ -129,7 +132,10 @@ while (changed == true)
                     if successTem==true
                         [M.mod{i_mod}] = getUface(M.mod{i_mod});
                         lc = coordToMesh(lc,M);
-                        [M,~] = remeshLocRelaxLattice(m,M,lc,edg_add,'local',1);
+                        [M] = remeshLocRelaxLattice(M.mod{i_mod},M,lc,edg_add);
+                        lc = coordToMesh(lc,M);
+                    else 
+                        warning('remesh topologicalDefect');
                     end
 %----------------------------------------------------------------------------------------                    
                     case 2 %merge
@@ -239,18 +245,11 @@ while (changed == true)
                         end
                         edg_add=[edg_add;M.mod{i_mod}.var.edge_all(sum(M.mod{i_mod}.var.edge_all == i_e_new,2)>0,:)];
                         edg_add=unique(edg_add,'row');
-                        [M,~] = remeshLocRelax(m,M,edg_add,'local',1);
+                        lc = coordToMesh(lc,M);
+                        [M] = remeshLocRelaxLattice(M.mod{i_mod},M,lc,edg_add);
+                        lc = coordToMesh(lc,M);
                     end
                     %------------------------------------------------------
-                end
-                %-----------------------------------------------locate paired edge to remesh one more time
-                if iSM==1
-                    switch SplitOrMergePair(iSM)
-                        case 1 %split first, find the smallest edge to merge
-                            i_edg=getIDremeshPaired(M,lc,i_mod,1);
-                        case 2 %merge first, find the largest edge to split
-                            i_edg=getIDremeshPaired(M,lc,i_mod,2);
-                    end
                 end
                 %------------------------------------------------------
             end
@@ -260,7 +259,9 @@ while (changed == true)
         end % nRemesh > 0
 %----------------------------------------------------------------------------------cutoff
     nTry=nTry+1;
+    if nTry>100
     warning('remesh too many trails!!');
+    end
 %----------------------------------------------------------------------------------------    
 end
 %==========================================================================
@@ -286,17 +287,17 @@ function [idRemesh,SplitOrMerge,split,merge]=getIDremesh(M,lc,i_mod)
         SplitOrMerge = [ones(nTooLong,1);2*ones(nTooshort,1)]; % Split=1 Merge=2
 end
 %==========================================================================
-function [i_edg]=getIDremeshPaired(M,lc,i_mod,minORmax)
+function [i_edg,split,merge]=getIDremeshPaired(M,lc,i_mod,minORmax)
         meshIDedg=lc.component{i_mod}.meshID(M.mod{i_mod}.var.edge_all);
         coordTem1=meshToCoord(lc,meshIDedg(:,1));
         coordTem2=meshToCoord(lc,meshIDedg(:,2));
         dist=sqrt(sum((coordTem1-coordTem2).^2,2));
         id_all = (1:M.mod{i_mod}.var.n_edg)';
         [split,merge] = remeshSplitMerge(M.mod{i_mod},M,id_all,id_all);
-        if minORmax==1
+        if minORmax==2 %merge: find shortest
             [~,idSrt]=sort(dist,'ascend');
             idSrt=idSrt(merge.can(idSrt));
-        elseif minORmax==2
+        elseif minORmax==1 %split: find shortest
             [~,idSrt]=sort(dist,'descend');
             idSrt=idSrt(split.can(idSrt));
         end

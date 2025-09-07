@@ -236,7 +236,7 @@ classdef ModMembrane
         [m,remeshed] = remeshMergeOpt(m,j,k,id_ring_edg,edg_add_org,i_edg,rLim,varargin);
         [Vver] = Volume(m,varargin);
         [M,remeshed] = remeshLattice(m,lc,M,varargin);
-        [M,loc_relaxed] = remeshLocRelaxLattice(m,M,lc,edg_add, varargin);
+        [M] = remeshLocRelaxLattice(m,M,lc,edg_add, varargin);
         [lc,m] = locDynLattice(m,lc,iM,varargin);
     end
 %==========================================================================

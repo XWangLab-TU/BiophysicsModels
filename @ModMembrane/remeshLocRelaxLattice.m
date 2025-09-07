@@ -1,4 +1,4 @@
-function [M,loc_relaxed] = remeshLocRelaxLattice(m,M,lc,edg_add, varargin)
+function [M] = remeshLocRelaxLattice(m,M,lc,edg_add, varargin)
 %--------------------------------------------------------------------------
         % flip performs the local relaxing after remeshing on @ModMembrane,
         % including the edge indicated and its 1-ring neighbors
