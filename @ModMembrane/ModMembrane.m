@@ -237,7 +237,7 @@ classdef ModMembrane
         [Vver] = Volume(m,varargin);
         [M,remeshed] = remeshLattice(m,lc,M,varargin);
         [M] = remeshLocRelaxLattice(m,M,lc,edg_add, varargin);
-        [lc,m] = locDynLattice(m,lc,iM,varargin);
+        [m] = locDynLattice(m,lc,M,varargin);
     end
 %==========================================================================
 %==========================================================================    
@@ -249,6 +249,7 @@ methods(Static)
     [coord,loc_relaxed,fc,check]=locDynMex(coord,id_on_coord,A,pmc,fn,R,in,rg);
     dens=densTranMex(dens,edge_all,n_node,pm,id_on_edg);
     [var,topologicalDefect] = remeshAddVertex(pm,var,ver_new,edge_all_new,face_new, varargin);
+    [coord]=locDynLatticeMex(pm,coord,id_on_coord,j_T,n_node);
     [f] = demo(varargin);
 end
 end

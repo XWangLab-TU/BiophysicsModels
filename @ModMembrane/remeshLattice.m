@@ -23,6 +23,7 @@ while (changed == true)
 %----------------------------------------------------------------------------------------
         [idRemesh,SplitOrMerge,split,merge]=getIDremesh(M,lc,i_mod);
         nRemesh = size(idRemesh,1);
+%         disp(nRemesh);
 %----------------------------------------------------------------------------------------        
         if nRemesh > 0
             iRemesh = randsample(nRemesh,1);

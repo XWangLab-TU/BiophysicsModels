@@ -1,19 +1,22 @@
-function [lc,m] = locDynLattice(m,lc,iM,varargin)
+function [m] = locDynLattice(m,lc,M,varargin)
 %--------------------------------------------------------------------------
 %--------------------------------------------------------------------------   
 ip = inputParser;
-ip.CaseSensitive = false;
+ip.CaseSensitive = true;
 ip.addRequired('m', @(x) isa(x,'ModMembrane'));
 ip.addRequired('lc', @(x) isa(x,'ComLattice'));
-ip.addRequired('iM', @(x) isnumeric(x)); %which cell in lc is the membrane 
+ip.addRequired('M', @(x) isa(x,'model'));
 ip.addParameter('k', 1, @isnumeric);
 ip.addParameter('n', 1000, @isnumeric);
-ip.addParameter('mex_avail', false, @islogical);
 ip.addParameter('plot_or_not', false, @islogical);
-ip.parse(m,lc,iM,varargin{:});
+ip.addParameter('mex_avail', true, @islogical);
+ip.parse(m,lc,M,varargin{:});
 %----------------------------------------------------------------------------------------
+iM=M.i_mod.ModMembrane;
 k=ip.Results.k;
 n=ip.Results.n;
+%----------------------------------------------------------------------------------------
+if ip.Results.mex_avail==false
 idAlt=zeros(6,1);
 idAlt(1)=lc.geometry.Dx;
 idAlt(2)=-lc.geometry.Dx;
@@ -45,4 +48,16 @@ end
 end
 %----------------------------------------------------------------------------------------
 m.var.coord=meshToCoord(lc,lc.component{iM}.meshID);
+else
+%======================================================================================== mex
+pm=[k;n;m.pm.l0];
+[coord]=ModMembrane.locDynLatticeMex...
+       (pm,...
+        m.var.coord,...
+        m.var.id_on_coord,...
+        m.var.j_T,...
+        m.var.n_node'); %n_node must be column
+m.var.coord=coord;
+%========================================================================================
+end
 end
