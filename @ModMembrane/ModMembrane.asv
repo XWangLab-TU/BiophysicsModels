@@ -45,8 +45,7 @@ classdef ModMembrane
             ip.addParameter('pm_exist', [], @isstruct);
             ip.addParameter('case_non_close', 1, @isnumeric);
             ip.addParameter('l0', 1, @isnumeric);
-            ip.addParameter('V0', 733.8, @isnumeric);% 733.8 l_bar^3 for RBC
-            ip.addParameter('A0', 553, @isnumeric);% 553 l_bar^2 for RBC
+            
             ip.parse(close_surf,n_ico_sphere,n_adp,varargin{:}); 
 %--------------------------------------------------------------------------
             case_non_close=ip.Results.case_non_close;
@@ -59,8 +58,7 @@ classdef ModMembrane
             if ip.Results.update==false
             obj.prop = {'Particle','varDt','needBreakOff','forceRelateMod'};
             obj.failInfo='';
-            [obj] = SetParameter(obj,'close_surf',close_surf,'n_ico_sphere',n_ico_sphere,'unit',unit,...
-                                'l0',ip.Results.l0,'V0',ip.Results.V0,'A0',ip.Results.A0);
+            [obj] = SetParameter(obj,'close_surf',close_surf,'n_ico_sphere',n_ico_sphere,'unit',unit,'l0',ip.Results.l0);
             if close_surf==true
                 [ver_tem,face_tem] = icosphere(obj);
                 [obj] = SetVar(obj,'coord',ver_tem,'face',face_tem,'n_adp',n_adp);

@@ -50,7 +50,8 @@ light_ang=ip.Results.light_ang;
 colBar=ip.Results.colBar;
 xyzLim=ip.Results.xyzLim;
 if isempty(xyzLim)
-    xyzLim=[-10 10;-10 10;-10 10];
+    xyzLim1=min(min(vertices))-1; xyzLim2=max(max(vertices))+1;
+    xyzLim=[xyzLim1 xyzLim2;xyzLim1 xyzLim2;xyzLim1 xyzLim2];
 end
 %==========================================================================
 if isempty(f)
