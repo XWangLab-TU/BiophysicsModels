@@ -10,9 +10,10 @@ ip.addRequired('m', @(x) isa(x,'ModMembrane'));
 ip.addRequired('lc', @(x) isa(x,'ComLattice'));
 ip.addRequired('M', @(x) isa(x,'model'));
 ip.addParameter('print_or_not', true, @islogical); %whether to ouput steps
+ip.addParameter('nTryMax', 5, @isnumeric);
 ip.parse(m,lc,M,varargin{:});
 %----------------------------------------------------------------------------------------
-print_or_not=ip.Results.print_or_not;
+nTryMax=ip.Results.nTryMax;
 %--------------------------------------------------------------------------
 i_mod=M.i_mod.ModMembrane;  %membrane
 %----------------------------------------------------------------------------------------        
@@ -260,8 +261,10 @@ while (changed == true)
         end % nRemesh > 0
 %----------------------------------------------------------------------------------cutoff
     nTry=nTry+1;
-    if nTry>100
+    disp(['abnormal edge #: ' num2str(nRemesh)]);
+    if nTry>nTryMax
     warning('remesh too many trails!!');
+    changed=false;
     end
 %----------------------------------------------------------------------------------------    
 end
@@ -274,9 +277,11 @@ function [idRemesh,SplitOrMerge,split,merge]=getIDremesh(M,lc,i_mod)
         coordTem2=meshToCoord(lc,meshIDedg(:,2));
         dist=sqrt(sum((coordTem1-coordTem2).^2,2));
         id_all = (1:M.mod{i_mod}.var.n_edg)';   
-        idTooShort=dist<M.mod{i_mod}.pm.Vedg.rb_1;
+        Rremesh1=0.5*(M.mod{i_mod}.pm.Vedg.rb_1+M.mod{i_mod}.pm.Vedg.r_1);
+        Rremesh2=0.5*(M.mod{i_mod}.pm.Vedg.rb_2+M.mod{i_mod}.pm.Vedg.r_2);
+        idTooShort=dist<Rremesh1;
         idTooShort=id_all(idTooShort);
-        idTooLong=dist>M.mod{i_mod}.pm.Vedg.rb_2;
+        idTooLong=dist>Rremesh2;
         idTooLong=id_all(idTooLong);
         [split,merge] = remeshSplitMerge(M.mod{i_mod},M,idTooLong,idTooShort);
         %M.mod{i_mod}.var.CanSplitMerge=[split.can,merge.can];
