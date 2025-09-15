@@ -81,9 +81,12 @@ for (int i=0; i<n; i++){
     //---------------------------------------------------------------------
     bool done;
     done=false;
+    rm=GetUniform();
+    double dr=3.*rm;
+    dr=floor(dr+0.5);
     for (int iAlt=0; iAlt<6; iAlt++){
         if (iAlt==0){
-            coord[iVer][0]++;
+            coord[iVer][0]+=dr;
             Vtry=0.;
             for (int j=0; j<n_node[iVer]; j++){
                 D=0.;
@@ -98,11 +101,11 @@ for (int i=0; i<n; i++){
                done=true;
             }
             else {
-            coord[iVer][0]--;
+            coord[iVer][0]-=dr;
             }
         }
         else if (iAlt==1){
-            coord[iVer][0]--;
+            coord[iVer][0]-=dr;
             Vtry=0.;
             for (int j=0; j<n_node[iVer]; j++){
                 D=0.;
@@ -117,11 +120,11 @@ for (int i=0; i<n; i++){
                done=true;
             }
             else {
-            coord[iVer][0]++;
+            coord[iVer][0]+=dr;
             }
         }
         else if (iAlt==2){
-            coord[iVer][1]++;
+            coord[iVer][1]+=dr;
             Vtry=0.;
             for (int j=0; j<n_node[iVer]; j++){
                 D=0.;
@@ -136,11 +139,11 @@ for (int i=0; i<n; i++){
                done=true;
             }
             else {
-            coord[iVer][1]--;
+            coord[iVer][1]-=dr;
             }
         }
         else if (iAlt==3){
-            coord[iVer][1]--;
+            coord[iVer][1]-=dr;
             Vtry=0.;
             for (int j=0; j<n_node[iVer]; j++){
                 D=0.;
@@ -155,11 +158,11 @@ for (int i=0; i<n; i++){
                done=true;
             }
             else {
-            coord[iVer][1]++;
+            coord[iVer][1]+=dr;
             }
         }
         else if (iAlt==4){
-            coord[iVer][2]++;
+            coord[iVer][2]+=dr;
             Vtry=0.;
             for (int j=0; j<n_node[iVer]; j++){
                 D=0.;
@@ -174,11 +177,11 @@ for (int i=0; i<n; i++){
                done=true;
             }
             else {
-            coord[iVer][2]--;
+            coord[iVer][2]-=dr;
             }
         }
         else if (iAlt==5){
-            coord[iVer][2]--;
+            coord[iVer][2]-=dr;
             Vtry=0.;
             for (int j=0; j<n_node[iVer]; j++){
                 D=0.;
@@ -193,7 +196,7 @@ for (int i=0; i<n; i++){
                done=true;
             }
             else {
-            coord[iVer][2]++;
+            coord[iVer][2]+=dr;
             }
         }
         if (done==true) {break;}

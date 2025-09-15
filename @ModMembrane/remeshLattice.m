@@ -263,7 +263,7 @@ while (changed == true)
     nTry=nTry+1;
     disp(['abnormal edge #: ' num2str(nRemesh)]);
     if nTry>nTryMax
-    warning('remesh too many trails!!');
+    warning('remesh too many trials!!');
     changed=false;
     end
 %----------------------------------------------------------------------------------------    
