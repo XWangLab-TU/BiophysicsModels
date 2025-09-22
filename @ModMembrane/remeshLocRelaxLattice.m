@@ -141,7 +141,7 @@ if ~isempty(id_int)
     M.mod{i_mod}.var.id_bound=[M.mod{i_mod}.var.id_bound;id_int];
 end
 %%
-[M.mod{i_mod}] = locDynLattice(m,lc,M);
+[M.mod{i_mod}] = locDynLattice(M.mod{i_mod},lc,M); % m=locDynLattice(m,lc,M);
 
 M.mod{i_mod}.var.id_on_edg=id_on_edg_save;
 M.mod{i_mod}.var.n_on_edg=n_on_edg_save;

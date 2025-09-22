@@ -76,7 +76,7 @@ for (int i=0; i<n; i++){
     int idx=floor(n_perc+0.5);
     iVer=id_on_coord[idx];
     Etot=0.;
-//     mexPrintf("%d %d...\n", id_on_coord[0],iVer);
+    mexPrintf("%d %d...\n", id_on_coord[0],iVer);
     //---------------------------------------------------------------------
     for (int iEdg=0; iEdg<m_edg; iEdg++){
         Dedg[iEdg]=sqrt((ver[edg[iEdg][1]][0]-ver[edg[iEdg][0]][0])*(ver[edg[iEdg][1]][0]-ver[edg[iEdg][0]][0])+
@@ -122,12 +122,13 @@ for (int i=0; i<n; i++){
     else if (iPick==3) {ver[iVer][1]-=dr;}
     else if (iPick==4) {ver[iVer][2]+=dr;}
     else if (iPick==5) {ver[iVer][2]-=dr;}
-    //---------------------------------------------------------------------    
-} //i->n
+    //---------------------------------------------------------------------
+    
+} //it
 //----------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------
 for (int i=0; i<m_coord; i++){
-    outM[i] =  ver[i][0];          outM[i+m_coord] =  ver[i][1];        outM[i+m_coord*2] =  ver[i][2];
+    outM[i] =  coord[i][0];          outM[i+m_coord] =  coord[i][1];        outM[i+m_coord*2] =  coord[i][2];
 }
 // mexPrintf("======%f %f %d %f;...\n", rMin, rMax, loc_relaxed,r[iEdgExo]);
 //----------------------------------------------------------------------------------------

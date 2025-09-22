@@ -11,11 +11,10 @@ ip.addRequired('lc', @(x) isa(x,'ComLattice'));
 ip.addRequired('M', @(x) isa(x,'model'));
 ip.addParameter('print_or_not', true, @islogical); %whether to ouput steps
 ip.addParameter('nTryMax', 5, @isnumeric);
-ip.addParameter('paired', 1, @isnumeric); %1-single, 2:paired
+ip.addParameter('nTryMax', 5, @isnumeric); %1-single, 2
 ip.parse(m,lc,M,varargin{:});
 %----------------------------------------------------------------------------------------
 nTryMax=ip.Results.nTryMax;
-paired=ip.Results.paired;
 %--------------------------------------------------------------------------
 i_mod=M.i_mod.ModMembrane;  %membrane
 %----------------------------------------------------------------------------------------        
@@ -37,7 +36,7 @@ while (changed == true)
             else
                 SplitOrMergePair=[2 1];
             end
-            for iSM=1:paired
+            for iSM=1:1
                 if iSM==2
                     [i_edg,split,merge]=getIDremeshPaired(M,lc,i_mod,SplitOrMergePair(iSM));
                 end
