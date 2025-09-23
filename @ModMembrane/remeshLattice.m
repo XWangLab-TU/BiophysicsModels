@@ -11,7 +11,7 @@ ip.addRequired('lc', @(x) isa(x,'ComLattice'));
 ip.addRequired('M', @(x) isa(x,'model'));
 ip.addParameter('print_or_not', true, @islogical); %whether to ouput steps
 ip.addParameter('nTryMax', 5, @isnumeric);
-ip.addParameter('paired', 1, @isnumeric); %1-single, 2:paired
+ip.addParameter('paired', 2, @isnumeric); %1-single, 2:paired
 ip.parse(m,lc,M,varargin{:});
 %----------------------------------------------------------------------------------------
 nTryMax=ip.Results.nTryMax;

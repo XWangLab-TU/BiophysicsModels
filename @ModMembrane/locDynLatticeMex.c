@@ -59,6 +59,8 @@ int n;
 n=floor(pm_in[1]+0.5);
 double l0;
 l0=pm_in[2]; 
+double r1=pm_in[3];
+double r2=pm_in[4];
 double n_on;
 n_on=m_id_on_coord;
 double Etot,Etry;
@@ -68,6 +70,7 @@ double n_perc;
 double DedgTry;
 double Dedg[m_edg];
 bool accept;
+bool done;
 //========================================================================================================================== 
 //========================================================================================================================== 
 for (int i=0; i<n; i++){
@@ -78,12 +81,15 @@ for (int i=0; i<n; i++){
     Etot=0.;
 //     mexPrintf("%d %d...\n", id_on_coord[0],iVer);
     //---------------------------------------------------------------------
+    done=true;
     for (int iEdg=0; iEdg<m_edg; iEdg++){
         Dedg[iEdg]=sqrt((ver[edg[iEdg][1]][0]-ver[edg[iEdg][0]][0])*(ver[edg[iEdg][1]][0]-ver[edg[iEdg][0]][0])+
                         (ver[edg[iEdg][1]][1]-ver[edg[iEdg][0]][1])*(ver[edg[iEdg][1]][1]-ver[edg[iEdg][0]][1])+
                         (ver[edg[iEdg][1]][2]-ver[edg[iEdg][0]][2])*(ver[edg[iEdg][1]][2]-ver[edg[iEdg][0]][2]));
         Etot+=k*(Dedg[iEdg]-l0)*(Dedg[iEdg]-l0);
+        if ((Dedg[iEdg]<r1) || (Dedg[iEdg]>r2)) {done=false;}
     }
+    if (done==true) {break;}
     //---------------------------------------------------------------------
     rm=GetUniform();
     double dr=1.*rm;

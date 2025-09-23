@@ -51,8 +51,11 @@ m.var.coord=meshToCoord(lc,lc.component{iM}.meshID);
 else
 %======================================================================================== mex
 % D=sum(sqrt((m.var.coord(m.var.edge_all(:,1),:)-m.var.coord(m.var.edge_all(:,2),:)).^2),2);
-pm=[k;n;m.pm.l0];
-% pm=[k;n;mean(D)];
+% Rremesh1=0.5*(m.pm.Vedg.rb_1+m.pm.Vedg.r_1);
+% Rremesh2=0.5*(m.pm.Vedg.rb_2+m.pm.Vedg.r_2);
+Rremesh1=m.pm.Vedg.rb_1;
+Rremesh2=m.pm.Vedg.rb_2;
+pm=[k;n;m.pm.l0;Rremesh1;Rremesh2];
 [coord]=ModMembrane.locDynLatticeMex...
        (pm,...
         m.var.coord,...
