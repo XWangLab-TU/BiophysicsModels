@@ -141,7 +141,47 @@ if ~isempty(id_int)
     M.mod{i_mod}.var.id_bound=[M.mod{i_mod}.var.id_bound;id_int];
 end
 %%
-[M.mod{i_mod}] = locDynLattice(M.mod{i_mod},lc,M); % m=locDynLattice(m,lc,M);
+% [M.mod{i_mod}] = locDynLattice(M.mod{i_mod},lc,M); % m=locDynLattice(m,lc,M);
+pmc=zeros(10,1);
+    pmc(1) = 20000;
+    pmc(2) = M.mod{i_mod}.pm.dt;
+    pmc(3) = M.mod{i_mod}.pm.P;
+    pmc(4) = M.mod{i_mod}.pm.k_c*0.; 
+    pmc(5) = M.mod{i_mod}.pm.k_e;
+    pmc(6) = M.mod{i_mod}.pm.dr;
+    pmc(7) = 0.; %m.pm.Vvol.k_V;
+    pmc(8) = 0.; %m.pm.Vsurf.k_A;
+    pmc(9) = M.mod{i_mod}.pm.Vvol.V0;
+    pmc(10) = M.mod{i_mod}.pm.Vsurf.A0;
+    pmc(11) = M.mod{i_mod}.pm.nAVmean;
+    pmc(12) = M.mod{i_mod}.pm.k_a;   
+    pmc(13) = M.mod{i_mod}.pm.l0;   
+    pmc(14) = M.mod{i_mod}.pm.kBT;   
+    pmc(15) = 1;  %-1:GLOBAL relax, to judge if remesh needed; 1: local relax
+    j_T = M.mod{i_mod}.var.j_T; j_T(isnan(j_T)) = 0;
+    pmVedg=zeros(9,1);
+    pmVedg(1)=M.mod{i_mod}.pm.Vedg.V_0;
+    pmVedg(2)=M.mod{i_mod}.pm.Vedg.r_1;
+    pmVedg(3)=M.mod{i_mod}.pm.Vedg.r_2;
+    pmVedg(4)=M.mod{i_mod}.pm.Vedg.rb_1;
+    pmVedg(5)=M.mod{i_mod}.pm.Vedg.rb_2;
+    pmVedg(6)=M.mod{i_mod}.pm.Vedg.k_w;
+    pmVedg(7)=M.mod{i_mod}.pm.Vedg.e_b;
+    pmVedg(8)=M.mod{i_mod}.pm.Vedg.e_w;
+    pmVedg(9)=M.mod{i_mod}.pm.Vedg.k_b; 
+    iVerNew=mode(edg_add,'all');
+[M.mod{i_mod}.var.coord]=ModMembrane.locDynLatticeMex...
+       (M.mod{M.i_mod.ModMembrane}.var.coord,...
+        pmc,...
+        M.mod{M.i_mod.ModMembrane}.var.edge_all,...
+        M.mod{M.i_mod.ModMembrane}.var.face_unq,...
+        j_T,...
+        M.mod{M.i_mod.ModMembrane}.var.id_on_coord,... %iVerNew
+        M.mod{M.i_mod.ModMembrane}.var.n_node',...
+        M.mod{M.i_mod.ModMembrane}.var.T_s',...
+        M.mod{M.i_mod.ModMembrane}.var.T_e',...
+        M.mod{M.i_mod.ModMembrane}.var.dens,...
+        pmVedg);
 
 M.mod{i_mod}.var.id_on_edg=id_on_edg_save;
 M.mod{i_mod}.var.n_on_edg=n_on_edg_save;
@@ -152,21 +192,13 @@ M.mod{i_mod}.var.n_bound=n_bound_save;
 
 %%
 if (plot_or_not == true) %|| (relaxed == false)
+    %%
     %save('temp.mat','var','edg_add');
     m=M.mod{i_mod};
-% m.var.id_on_edg=id_ring_edg;
-% m.var.id_on_coord=id_ring_in;
-% m.var.id_bound=id_ring_ver;
 plot(m,'FaceAlpha', 1, 'LineStyle','--'); xlabel('x');ylabel('y');zlabel('z');hold on;
-% scatter3(m.var.coord(edg_add(:,1),1),m.var.coord(edg_add(:,1),2),m.var.coord(edg_add(:,1),3),40,'filled','MarkerFaceColor',[0 1 0]); hold on;
-% scatter3(m.var.coord(edg_add(:,2),1),m.var.coord(edg_add(:,2),2),m.var.coord(edg_add(:,2),3),40,'filled','MarkerFaceColor',[0 1 0]); hold on;
 scatter3(m.var.coord(m.var.id_bound,1),m.var.coord(m.var.id_bound,2),m.var.coord(m.var.id_bound,3),40,'filled','MarkerFaceColor',[0 1 1]); hold on;
 scatter3(m.var.coord(m.var.id_on_coord,1),m.var.coord(m.var.id_on_coord,2),m.var.coord(m.var.id_on_coord,3),40,'filled','MarkerFaceColor',[0 0.2 1]); hold on;
-% if local>1
-%     plot3([m.var.coord(M.mod{i_mod}.var.edge_all(edg_exo,1),1),m.var.coord(M.mod{i_mod}.var.edge_all(edg_exo,2),1)],...
-%       [m.var.coord(M.mod{i_mod}.var.edge_all(edg_exo,1),2),m.var.coord(M.mod{i_mod}.var.edge_all(edg_exo,2),2)],...
-%       [m.var.coord(M.mod{i_mod}.var.edge_all(edg_exo,1),3),m.var.coord(M.mod{i_mod}.var.edge_all(edg_exo,2),3)],'linewidth',5,'color',[1 0 0]);hold on;
-% end
+scatter3(m.var.coord(iVerNew,1),m.var.coord(iVerNew,2),m.var.coord(iVerNew,3),150,'filled','MarkerFaceColor',[1 0.2 0.1]); hold on;
 for i = 1:n_ring_edg
     plot3([m.var.coord(m.var.edge_all(m.var.id_on_edg(i),1),1),m.var.coord(m.var.edge_all(m.var.id_on_edg(i),2),1)],...
       [m.var.coord(m.var.edge_all(m.var.id_on_edg(i),1),2),m.var.coord(m.var.edge_all(m.var.id_on_edg(i),2),2)],...

@@ -50,20 +50,47 @@ end
 m.var.coord=meshToCoord(lc,lc.component{iM}.meshID);
 else
 %======================================================================================== mex
-% D=sum(sqrt((m.var.coord(m.var.edge_all(:,1),:)-m.var.coord(m.var.edge_all(:,2),:)).^2),2);
-% Rremesh1=0.5*(m.pm.Vedg.rb_1+m.pm.Vedg.r_1);
-% Rremesh2=0.5*(m.pm.Vedg.rb_2+m.pm.Vedg.r_2);
-Rremesh1=m.pm.Vedg.rb_1;
-Rremesh2=m.pm.Vedg.rb_2;
-pm=[k;n;m.pm.l0;Rremesh1;Rremesh2];
-[coord]=ModMembrane.locDynLatticeMex...
-       (pm,...
-        m.var.coord,...
+pmc=zeros(10,1);
+    pmc(1) = 100000;
+    pmc(2) = m.pm.dt;
+    pmc(3) = m.pm.P;
+    pmc(4) = m.pm.k_c*0.;
+    pmc(5) = m.pm.k_e;
+    pmc(6) = m.pm.dr;
+    pmc(7) = 0.; %m.pm.Vvol.k_V;
+    pmc(8) = 0.; %m.pm.Vsurf.k_A;
+    pmc(9) = m.pm.Vvol.V0*0;
+    pmc(10) = m.pm.Vsurf.A0*0;
+    pmc(11) = m.pm.nAVmean;
+    pmc(12) = m.pm.k_a;   
+    pmc(13) = m.pm.l0;   
+    pmc(14) = m.pm.kBT;   
+    pmc(15) = 1;  %-1:GLOBAL relax, to judge if remesh needed; 1: local relax
+    j_T = m.var.j_T; j_T(isnan(j_T)) = 0;
+    pmVedg=zeros(9,1);
+    pmVedg(1)=m.pm.Vedg.V_0;
+    pmVedg(2)=m.pm.Vedg.r_1;
+    pmVedg(3)=m.pm.Vedg.r_2;
+    pmVedg(4)=m.pm.Vedg.rb_1;
+    pmVedg(5)=m.pm.Vedg.rb_2;
+    pmVedg(6)=m.pm.Vedg.k_w;
+    pmVedg(7)=m.pm.Vedg.e_b;
+    pmVedg(8)=m.pm.Vedg.e_w;
+    pmVedg(9)=m.pm.Vedg.k_b; 
+[m.var.coord]=ModMembrane.locDynLatticeMex...
+       (m.var.coord,...
+        pmc,...
+        m.var.edge_all,...
+        m.var.face_unq,...
+        j_T,...
         m.var.id_on_coord,...
-        m.var.j_T,...
-        m.var.n_node',... %n_node must be column
-        m.var.edge_all(m.var.id_on_edg,:)); 
-m.var.coord=coord;
+        m.var.n_node',...
+        m.var.T_s',...
+        m.var.T_e',...
+        m.var.dens,...
+        pmVedg,...
+        iVerNew);
+%  plot(m,'FaceAlpha', 1, 'LineStyle','--');   
 %========================================================================================
 end
 end

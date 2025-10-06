@@ -49,15 +49,15 @@ ip.addParameter('flip_bond', true, @islogical);
 ip.addParameter('P', 0, @isnumeric);
 ip.addParameter('n_val_max', 8, @isnumeric);
 ip.addParameter('n_val_min', 5, @isnumeric);
-ip.addParameter('edg_V_0',2, @isnumeric);
-ip.addParameter('edg_r_1',0.7, @isnumeric);
-ip.addParameter('edg_r_2',1.8, @isnumeric);
-ip.addParameter('edg_rb_1',0.9, @isnumeric);
-ip.addParameter('edg_rb_2',1.5, @isnumeric);
+ip.addParameter('edg_V_0',10, @isnumeric);
+ip.addParameter('edg_r_1',0.00001, @isnumeric);
+ip.addParameter('edg_r_2',10.5, @isnumeric);
+ip.addParameter('edg_rb_1',0.7, @isnumeric);
+ip.addParameter('edg_rb_2',1.3, @isnumeric);
 ip.addParameter('edg_k_w',200, @isnumeric);
 ip.addParameter('edg_e_b',10, @isnumeric);
 ip.addParameter('edg_e_w',10, @isnumeric);
-ip.addParameter('edg_k_b',100, @isnumeric);
+ip.addParameter('edg_k_b',25, @isnumeric);
 ip.addParameter('Vdw_r_1',0.0, @isnumeric); %-0.05 l0
 ip.addParameter('Vdw_r_2', 2.2, @isnumeric); %2.2 l0
 ip.addParameter('Vdw_rl_min', 0.7, @isnumeric); %0.7 l0

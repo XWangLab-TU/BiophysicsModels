@@ -10,12 +10,14 @@ ip.addRequired('m', @(x) isa(x,'ModMembrane'));
 ip.addRequired('lc', @(x) isa(x,'ComLattice'));
 ip.addRequired('M', @(x) isa(x,'model'));
 ip.addParameter('print_or_not', true, @islogical); %whether to ouput steps
-ip.addParameter('nTryMax', 5, @isnumeric);
+ip.addParameter('nTryMax', 1, @isnumeric);
 ip.addParameter('paired', 2, @isnumeric); %1-single, 2:paired
+ip.addParameter('relax_or_not', true, @islogical);
 ip.parse(m,lc,M,varargin{:});
 %----------------------------------------------------------------------------------------
 nTryMax=ip.Results.nTryMax;
 paired=ip.Results.paired;
+relax_or_not=ip.Results.relax_or_not;
 %--------------------------------------------------------------------------
 i_mod=M.i_mod.ModMembrane;  %membrane
 %----------------------------------------------------------------------------------------        
@@ -136,8 +138,11 @@ while (changed == true)
                     if successTem==true
                         [M.mod{i_mod}] = getUface(M.mod{i_mod});
                         lc = coordToMesh(lc,M);
+                        if relax_or_not==true
+                            [lc,M] = ComLattice(M,M.unit);
                         [M] = remeshLocRelaxLattice(M.mod{i_mod},M,lc,edg_add);
                         lc = coordToMesh(lc,M);
+                        end
                     else 
                         warning('remesh topologicalDefect');
                     end
@@ -250,8 +255,11 @@ while (changed == true)
                         edg_add=[edg_add;M.mod{i_mod}.var.edge_all(sum(M.mod{i_mod}.var.edge_all == i_e_new,2)>0,:)];
                         edg_add=unique(edg_add,'row');
                         lc = coordToMesh(lc,M);
+                        if relax_or_not==true
+                            [lc,M] = ComLattice(M,M.unit);
                         [M] = remeshLocRelaxLattice(M.mod{i_mod},M,lc,edg_add);
                         lc = coordToMesh(lc,M);
+                        end
                     end
                     %------------------------------------------------------
                 end
@@ -280,8 +288,10 @@ function [idRemesh,SplitOrMerge,split,merge]=getIDremesh(M,lc,i_mod)
 %         dist=sqrt(sum((coordTem1-coordTem2).^2,2));
         dist=sqrt(sum((M.mod{i_mod}.var.coord(M.mod{i_mod}.var.edge_all(:,1),:)-M.mod{i_mod}.var.coord(M.mod{i_mod}.var.edge_all(:,2),:)).^2,2));
         id_all = (1:M.mod{i_mod}.var.n_edg)';   
-        Rremesh1=0.5*(M.mod{i_mod}.pm.Vedg.rb_1+M.mod{i_mod}.pm.Vedg.r_1);
-        Rremesh2=0.5*(M.mod{i_mod}.pm.Vedg.rb_2+M.mod{i_mod}.pm.Vedg.r_2);
+%         Rremesh1=0.5*(M.mod{i_mod}.pm.Vedg.rb_1+M.mod{i_mod}.pm.Vedg.r_1);
+%         Rremesh2=0.5*(M.mod{i_mod}.pm.Vedg.rb_2+M.mod{i_mod}.pm.Vedg.r_2);
+        Rremesh1=M.mod{i_mod}.pm.Vedg.rb_1;
+        Rremesh2=M.mod{i_mod}.pm.Vedg.rb_2;
         idTooShort=dist<Rremesh1;
         idTooShort=id_all(idTooShort);
         idTooLong=dist>Rremesh2;
