@@ -49,7 +49,7 @@ ip.addParameter('flip_bond', true, @islogical);
 ip.addParameter('P', 0, @isnumeric);
 ip.addParameter('n_val_max', 8, @isnumeric);
 ip.addParameter('n_val_min', 5, @isnumeric);
-ip.addParameter('edg_V_0',10, @isnumeric);
+ip.addParameter('edg_V_0',20, @isnumeric);
 ip.addParameter('edg_r_1',0.00001, @isnumeric);
 ip.addParameter('edg_r_2',10.5, @isnumeric);
 ip.addParameter('edg_rb_1',0.7, @isnumeric);
