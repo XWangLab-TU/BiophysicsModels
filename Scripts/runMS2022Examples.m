@@ -1,5 +1,6 @@
 %==========================================================================
 % This script includes all the examples studied in the 2022 manuscript. 
+% https://doi.org/10.1371/journal.pcbi.1010766
 % Applications are separated into sections by double %% signs 
 % and can be run individually with 'ctrl'+'enter'
 % see the documentation of individual application for more detail
