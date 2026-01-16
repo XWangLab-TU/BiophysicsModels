@@ -16,7 +16,7 @@ end
 %----------------------------------------------------------------------------------------
 if update==false
     var=struct('coord',zeros(n,3),'ang',[],'n_coord',n,'coord_org',coord_org,'a',[],'ang_a',[],'O',[],'E',[],'V',[],...
-        'connect',zeros(3,2,n),'ctrl_pt_org',zeros(6,3),'bound',true(n,3),'idMesh',[]);
+        'connect',zeros(3,2,n),'ctrl_pt_org',zeros(6,3),'bound',true(n,3),'idMesh',[],'idBond',[1 2 3]);
     %var.bound(1,2)=false;
     %var.coord(:,1)=var.coord(:,1)-2;
     %----------------------------------------------------------------------

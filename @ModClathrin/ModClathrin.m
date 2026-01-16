@@ -215,6 +215,8 @@ classdef ModClathrin
         [foot] = getFoot(obj,varargin);
         [obj,changed] = link(obj,varargin);
         [T] = getTightness(obj,M,varargin);
+        [M,changed] = docking(c,M,r_init,varargin);
+        [M,changed] = recruit(c,M,varargin);
 %==========================================================================
     end
 %==========================================================================    

@@ -66,7 +66,6 @@ for i_c1=1:c.var.n_coord-1
                 else
                     c.var.connect=connect_save;
                 end
-                
                 %end
             end
 

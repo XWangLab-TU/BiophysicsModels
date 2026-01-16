@@ -19,6 +19,7 @@ classdef BiophysicsApp
         [] = exampleEndocytosis(dirRoot,dirMod,varargin);
         [] = memoryTest(dirRoot,dirMod,varargin);
         [] = ClathrinMediatedEndocytosisInit(dirRoot,dirMod,varargin);
+        [M,fig] = clathrinVesicle(dirLoc,varargin);
     end
 end
 

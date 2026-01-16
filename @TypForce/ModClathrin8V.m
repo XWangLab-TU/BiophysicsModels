@@ -68,11 +68,11 @@ else
             V(i_c1,i_c2)=V(i_c1,i_c2)+V_tem;
             V(i_c2,i_c1)=V(i_c2,i_c1)+V_tem;
             %%
-            V_tem=potential(CtrlPt(i_leg1,:,i_c1),CtrlPt(i_leg2,:,i_c2),mod.TypForce.pm.(['k_' int_name])(2));
+            V_tem=potential(CtrlPt(i_leg1,:,i_c1),CtrlPt(i_leg2+3,:,i_c2),mod.TypForce.pm.(['k_' int_name])(2));
             V(i_c1,i_c2)=V(i_c1,i_c2)+V_tem;
             V(i_c2,i_c1)=V(i_c2,i_c1)+V_tem;
             %%
-            V_tem=potential(CtrlPt(i_leg1+3,:,i_c1),CtrlPt(i_leg2+3,:,i_c2),mod.TypForce.pm.(['k_' int_name])(2));
+            V_tem=potential(CtrlPt(i_leg1+3,:,i_c1),CtrlPt(i_leg2,:,i_c2),mod.TypForce.pm.(['k_' int_name])(2));
             V(i_c1,i_c2)=V(i_c1,i_c2)+V_tem;
             V(i_c2,i_c1)=V(i_c2,i_c1)+V_tem;
         end

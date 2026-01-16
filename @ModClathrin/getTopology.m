@@ -23,16 +23,16 @@ ip.parse(c,junction,varargin{:});
 %--------------------------------------------------------------------------
 %%
 i_c=junction(1,1);
-    i_leg=junction(1,2);   
+i_leg=junction(1,2);   
 %%
 % i_c_try=i_c_check_left; i_leg_try=i_leg_check_left;
+% i_c_try=i_c_check_left_alt; i_leg_try=i_leg_check_left_alt;
 % i_c_try=i_c_check_right; i_leg_try=i_leg_check_right;
 % i_c_try=i_c_check_right_alt; i_leg_try=i_leg_check_right_alt;
 % i_c_try=i_c_check_new; i_leg_try=i_leg_check_new;
 % i_c_try=junction(2,1); i_leg_try=junction(2,2);
 % fig=figure('units','normalized','outerposition',[0 0 1 1]); 
-% plot(mod.mod{mod.i_mod.ModClathrin},'f',fig,'proxy_only',true,...
-%      'simple',true,'iC_iLeg',[i_c i_leg;i_c_try i_leg_try]);%'iC_iLeg',[6 1;4 2]
+% fig=figure;plot(c,'f',fig,'proxy_only',true,'simple',true,'iC_iLeg',[i_c i_leg;i_c_try i_leg_try]);
 %%
          topology_found=false;
          topology=false;
@@ -55,8 +55,10 @@ i_c=junction(1,1);
              i_leg_check_right_alt=i_leg_check_right;
              n_ring_right=i_c_check_right;
              %%
+             tStart = tic;
              while (topology_found==false) 
-              %%
+                %%
+                %----------------------------------------------------------
                 if i_c_check_left>0
                 i_c_check_new=c.var.connect(i_leg_check_left,1,i_c_check_left);
                 i_leg_check_new=c.var.connect(i_leg_check_left,2,i_c_check_left);
@@ -66,7 +68,7 @@ i_c=junction(1,1);
                 i_leg_check_left=i_leg_check_new;
                 n_ring_left=[n_ring_left;i_c_check_left];
                 end
-                %%
+                %----------------------------------------------------------
                 if ((i_c_check_left==junction(2,1)) && (i_leg_check_left==junction(2,2))) || ((i_c_check_left==junction(1,1)) && (i_leg_check_left==junction(1,2)))
                     topology_found=true;
                     topology=true;
@@ -84,7 +86,7 @@ i_c=junction(1,1);
                     topology_found=true;
                     topology=false;
                 end
-                %%
+                %----------------------------------------------------------
                 if i_c_check_right>0
                 i_c_check_new=c.var.connect(i_leg_check_right,1,i_c_check_right);
                 i_leg_check_new=c.var.connect(i_leg_check_right,2,i_c_check_right);
@@ -94,7 +96,7 @@ i_c=junction(1,1);
                 i_leg_check_right=i_leg_check_new;
                 n_ring_right=[n_ring_right;i_c_check_right];
                 end
-                %%
+                %----------------------------------------------------------
                 if ((i_c_check_right==junction(2,1)) && (i_leg_check_right==junction(2,2))) || ((i_c_check_right==junction(1,1)) && (i_leg_check_right==junction(1,2)))
                     topology_found=true;
                     topology=true;
@@ -112,6 +114,16 @@ i_c=junction(1,1);
                     topology_found=true;
                     topology=false;
                 end
+                time1 = toc(tStart);
+                if time1>50
+                    save('/MATLAB Drive/temp.mat',"c","junction");
+                    error('too long');
+                end
+                if (i_c_check_left==0)&&(i_c_check_left_alt==0)&&(i_c_check_right==0)&&(i_c_check_right_alt==0)
+                    topology=false;
+                    break;
+                end
+                % disp([i_c_check_left i_c_check_left_alt i_c_check_right i_c_check_right_alt]);
             end
          elseif size(junction,1)==1
              %%
